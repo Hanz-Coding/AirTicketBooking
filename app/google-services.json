@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "618062590941",
+    "project_id": "airticketbooking1-bdab4",
+    "storage_bucket": "airticketbooking1-bdab4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618062590941:android:f0b52fa0a0cc0769397c34",
+        "android_client_info": {
+          "package_name": "hanz.coding.airticketbooking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6jOdta6HzDalD61fc58hjvSh0ZXRcmhc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
