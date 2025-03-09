@@ -7,9 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
@@ -26,9 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hanz.coding.airticketbooking.R
-import hanz.coding.airticketbooking.domain.LocationModel
 import hanz.coding.airticketbooking.presentation.dashboard.component.DropDownList
 import hanz.coding.airticketbooking.presentation.dashboard.component.MyBottomBar
+import hanz.coding.airticketbooking.presentation.dashboard.component.PassengerCounter
 import hanz.coding.airticketbooking.presentation.dashboard.component.TopBar
 import hanz.coding.airticketbooking.presentation.dashboard.state.DashboardState
 import hanz.coding.airticketbooking.presentation.dashboard.viewmodel.DashboardViewModel
@@ -57,7 +61,10 @@ fun MainScreen(state: DashboardState) {
     var from: String
     var to: String
     var classes: String
-    StatusBarColor()
+    var adultPassenger: String = ""
+    var childPassenger: String = ""
+    // unlock this for preview
+//    StatusBarColor()
     Scaffold(
         bottomBar = { MyBottomBar() }
     ) { paddingValues ->
@@ -78,8 +85,10 @@ fun MainScreen(state: DashboardState) {
                         .fillMaxWidth()
                         .padding(vertical = 16.dp, horizontal = 24.dp)
                 ) {
-                    YellowTitle("From")
                     val locationNames: List<String> = locations.map { it.Name }
+
+                    //From Section
+                    YellowTitle("From")
                     DropDownList(
                         items = locationNames,
                         loadingIcon = painterResource(R.drawable.from_ic),
@@ -87,6 +96,54 @@ fun MainScreen(state: DashboardState) {
                         showLocationLoading = state.isLoading
                     ) { selectedItem ->
                         from = selectedItem
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    //To Section
+                    YellowTitle("To")
+                    DropDownList(
+                        items = locationNames,
+                        loadingIcon = painterResource(R.drawable.from_ic),
+                        hint = "Select Destination",
+                        showLocationLoading = state.isLoading
+                    ) { selectedItem ->
+                        to = selectedItem
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    //Passenger Counter
+                    YellowTitle("Passenger")
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        PassengerCounter(
+                            title = "Adult",
+                            modifier = Modifier.weight(1f)
+                        ) { adultPassenger = it }
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        PassengerCounter(
+                            title = "Child",
+                            modifier = Modifier.weight(1f)
+                        ) { childPassenger = it }
+                    }
+
+                    //Class Section
+                    Spacer(modifier = Modifier.height(8.dp))
+                    YellowTitle("Class")
+                    val classItems = listOf(
+                        "Business class",
+                        "First class",
+                        "Economy class"
+                    )
+                    DropDownList(
+                        items = classItems,
+                        loadingIcon = painterResource(R.drawable.seat_black_ic),
+                        hint = "Select Class",
+                        showLocationLoading = state.isLoading
+                    ) { selectedItem ->
+                        to = selectedItem
                     }
                 }
             }
