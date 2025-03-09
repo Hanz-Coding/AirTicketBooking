@@ -16,12 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -30,13 +29,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hanz.coding.airticketbooking.R
+import hanz.coding.airticketbooking.presentation.dashboard.component.DatePickerScreen
 import hanz.coding.airticketbooking.presentation.dashboard.component.DropDownList
 import hanz.coding.airticketbooking.presentation.dashboard.component.MyBottomBar
 import hanz.coding.airticketbooking.presentation.dashboard.component.PassengerCounter
 import hanz.coding.airticketbooking.presentation.dashboard.component.TopBar
 import hanz.coding.airticketbooking.presentation.dashboard.state.DashboardState
 import hanz.coding.airticketbooking.presentation.dashboard.viewmodel.DashboardViewModel
-import hanz.coding.airticketbooking.presentation.splash.StatusBarColor
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("RestrictedApi")
@@ -128,6 +127,15 @@ fun MainScreen(state: DashboardState) {
                             modifier = Modifier.weight(1f)
                         ) { childPassenger = it }
                     }
+
+                    //calendar Picker
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        YellowTitle("Departure date", Modifier.weight(1f))
+                        Spacer(modifier = Modifier.width(16.dp))
+                        YellowTitle("Return date", Modifier.weight(1f))
+                    }
+                    DatePickerScreen(modifier = Modifier.weight(1f))
 
                     //Class Section
                     Spacer(modifier = Modifier.height(8.dp))
