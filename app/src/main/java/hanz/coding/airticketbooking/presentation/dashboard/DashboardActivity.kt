@@ -1,6 +1,8 @@
 package hanz.coding.airticketbooking.presentation.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,20 +40,27 @@ import hanz.coding.airticketbooking.presentation.dashboard.component.PassengerCo
 import hanz.coding.airticketbooking.presentation.dashboard.component.TopBar
 import hanz.coding.airticketbooking.presentation.dashboard.state.DashboardState
 import hanz.coding.airticketbooking.presentation.dashboard.viewmodel.DashboardViewModel
+import hanz.coding.airticketbooking.presentation.search.SearchActivity
+import hanz.coding.airticketbooking.presentation.splash.GradientButton
+import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @SuppressLint("RestrictedApi")
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel = koinViewModel<DashboardViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
-            LaunchedEffect(true) {
-                viewModel.loadLocation()
+            KoinAndroidContext {
+                val viewModel = koinViewModel<DashboardViewModel>()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+                LaunchedEffect(true) {
+                    viewModel.loadLocation()
+                }
+                MainScreen(state)
             }
-            MainScreen(state)
         }
     }
 }
@@ -57,11 +68,12 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun MainScreen(state: DashboardState) {
     val locations = state.locations
-    var from: String
-    var to: String
-    var classes: String
+    var from: String = ""
+    var to: String = ""
+    var classes: String = ""
     var adultPassenger: String = ""
     var childPassenger: String = ""
+    val context: Context = LocalContext.current
     // unlock this for preview
 //    StatusBarColor()
     Scaffold(
@@ -151,8 +163,23 @@ fun MainScreen(state: DashboardState) {
                         hint = "Select Class",
                         showLocationLoading = state.isLoading
                     ) { selectedItem ->
-                        to = selectedItem
+                        classes = selectedItem
                     }
+
+                    // Search Button
+                    Spacer(modifier = Modifier.height(8.dp))
+                    GradientButton(
+                        onClick = {
+                            val intent = Intent(context, SearchActivity::class.java)
+                                .apply {
+                                    putExtra("from", from)
+                                    putExtra("to", to)
+                                    putExtra("numPassenger", adultPassenger + childPassenger)
+                                }
+                            context.startActivity(intent)
+                        },
+                        text = stringResource(R.string.btn_search)
+                    )
                 }
             }
         }
