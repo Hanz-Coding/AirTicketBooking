@@ -1,9 +1,14 @@
 package hanz.coding.airticketbooking.presentation.splash
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,10 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -23,12 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.text.TextStyle
+import androidx.core.view.WindowCompat
 import hanz.coding.airticketbooking.MainActivity
 import hanz.coding.airticketbooking.R
+import hanz.coding.airticketbooking.presentation.dashboard.DashboardActivity
 import hanz.coding.airticketbooking.ui.theme.AirTicketBookingTheme
 
 @SuppressLint("RestrictedApi", "CustomSplashScreen")
@@ -38,8 +44,9 @@ class SplashActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AirTicketBookingTheme {
+                StatusBarColor()
                 SplashScreen(onGetStartedClick = {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, DashboardActivity::class.java))
                 })
             }
         }
@@ -50,13 +57,20 @@ class SplashActivity : ComponentActivity() {
 @Composable
 fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Red),
     ) {
-        ConstraintLayout {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Blue)
+        ) {
             val (backgroundImg, title, subtitle, startbtn) = createRefs()
             Image(
                 painter = painterResource(R.drawable.splash_bg),
                 contentDescription = "splash",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .constrainAs(backgroundImg) {
                         top.linkTo(parent.top)
@@ -108,4 +122,11 @@ fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
             }
         }
     }
+}
+
+@Composable
+fun StatusBarColor() {
+    val window = (LocalView.current.context as Activity).window
+    WindowCompat.getInsetsController(window, window.decorView)
+        .isAppearanceLightStatusBars = false
 }

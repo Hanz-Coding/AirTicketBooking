@@ -1,0 +1,38 @@
+package hanz.coding.airticketbooking.domain.repository
+
+import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import hanz.coding.airticketbooking.domain.LocationModel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+
+class MainRepository {
+
+    private val firebaseDatabase = FirebaseDatabase.getInstance("https://airticketbooking1-bdab4-default-rtdb.asia-southeast1.firebasedatabase.app")
+
+
+    fun loadLocation(): Flow<List<LocationModel>> = callbackFlow {
+        val refLocation = firebaseDatabase.getReference("Locations")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                val locations = snapshot.children.mapNotNull {
+                    it.getValue(LocationModel::class.java)
+                }
+                println("hanz1 onDataChange ${snapshot}")
+                trySend(locations).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("hanz1 onCancelled")
+                close(error.toException())
+            }
+        }
+        refLocation.addValueEventListener(listener)
+        awaitClose { refLocation.removeEventListener(listener) }
+    }
+}
