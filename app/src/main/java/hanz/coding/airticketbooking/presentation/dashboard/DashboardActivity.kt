@@ -175,6 +175,8 @@ fun MainScreen(state: DashboardState) {
                                     putExtra("from", from)
                                     putExtra("to", to)
                                     putExtra("numPassenger", adultPassenger + childPassenger)
+                                }.also {
+                                    println("hanz1 from $from to $to number ${adultPassenger + childPassenger} ")
                                 }
                             context.startActivity(intent)
                         },

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hanz.coding.airticketbooking.presentation.search.components.ListItemScreen
@@ -24,9 +25,16 @@ class SearchActivity : ComponentActivity() {
         enableEdgeToEdge()
         from = intent.getStringExtra("from") ?: ""
         to = intent.getStringExtra("to") ?: ""
+        println("hanz1 onCreate from $from to $to ")
+
         setContent {
             KoinAndroidContext {
                 val viewModel = koinViewModel<SearchViewModel>()
+
+                LaunchedEffect(Unit) {
+                    viewModel.loadFlights(from, to)
+                }
+
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 StatusBarColor()
                 ListItemScreen(

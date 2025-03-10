@@ -41,7 +41,7 @@ class MainRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val flights = snapshot.children.mapNotNull {
                     it.getValue(FlightModel::class.java)
-                }.filter { it.from == from && it.to == to }
+                }
                 trySend(flights).isSuccess
             }
 
