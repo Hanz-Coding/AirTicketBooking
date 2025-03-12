@@ -5,4 +5,9 @@
     <string name="str_confirm">Confirm</string>
     <string name="btn_search">Search</string>
     <string name="search_result">Search Result</string>
+    <string name="seat_choose">Choose Seats</string>
+    <string name="str_available">Available</string>
+    <string name="str_selected">Selected</string>
+    <string name="str_unavailable">Unavailable</string>
+    <string name="str_confirm_seat">Confirm Seats</string>
 </resources>

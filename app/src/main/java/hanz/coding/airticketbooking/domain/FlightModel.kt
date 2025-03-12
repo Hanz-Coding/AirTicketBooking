@@ -16,4 +16,4 @@ data class FlightModel(
     var time: String = "",
     var to: String = "",
     var toShort: String = ""
-)
+) : java.io.Serializable

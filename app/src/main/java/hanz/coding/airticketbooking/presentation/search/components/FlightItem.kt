@@ -1,6 +1,7 @@
 package hanz.coding.airticketbooking.presentation.search.components
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +26,7 @@ import coil.compose.AsyncImage
 import hanz.coding.airticketbooking.R
 import hanz.coding.airticketbooking.domain.FlightModel
 import hanz.coding.airticketbooking.presentation.search.tempFlightModel
+import hanz.coding.airticketbooking.presentation.seat_select.SeatSelectActivity
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -34,7 +36,11 @@ fun FlightItem(item: FlightModel, index: Int) {
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .clickable { }
+            .clickable {
+                context.startActivity(Intent(context, SeatSelectActivity::class.java).apply {
+                    putExtra("flight", item)
+                })
+            }
             .background(
                 color = colorResource(R.color.lightPurple),
                 shape = RoundedCornerShape(15.dp)
