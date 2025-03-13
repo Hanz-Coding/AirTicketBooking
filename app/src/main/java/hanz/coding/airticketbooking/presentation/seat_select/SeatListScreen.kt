@@ -31,8 +31,8 @@ enum class SeatStatus {
 }
 
 data class Seat(
-    var status: SeatStatus,
-    var name: String
+    val status: SeatStatus,
+    val name: String
 )
 
 @Composable
@@ -42,7 +42,6 @@ fun SeatListScreen(
     onConfirm: () -> Unit,
     onAction: (SEATACTION, Seat) -> Unit
 ) {
-    val seatList = state.seatList
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -87,20 +86,18 @@ fun SeatListScreen(
                     }
             ) {
                 items(
-                    seatList
+                    state.seatList,
+                    key = { it.name }
                 ) { seat ->
-                    println("hanz1 REMOVE_SEAT _ITEM $seat")
                     SeatItem(
                         seat = seat,
                         onSeatClick = {
                             when (seat.status) {
                                 SeatStatus.AVAILABLE -> {
-                                    seat.status = SeatStatus.SELECTED
                                     onAction(SEATACTION.ADD_SEAT, seat)
                                 }
 
                                 SeatStatus.SELECTED -> {
-                                    seat.status = SeatStatus.AVAILABLE
                                     onAction(SEATACTION.REMOVE_SEAT, seat)
                                 }
 

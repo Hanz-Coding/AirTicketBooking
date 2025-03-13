@@ -17,7 +17,6 @@ class SeatViewModel : ViewModel() {
         flight = item
         val seatList = generateSeatList(flight)
         _state.update {
-            println("hanz12 updateFlight")
             it.copy(seatList = seatList)
         }
     }
@@ -26,38 +25,36 @@ class SeatViewModel : ViewModel() {
         when (action) {
             SEATACTION.ADD_SEAT -> {
                 _state.update {
-                    val list = it.selectedSeatName.toMutableList()
-                    val seats = it.seatList.toMutableList()
-                    seats.find { it.name == seat.name }?.let { item ->
-                        val index = seats.indexOf(item)
-                        seats[index] = item.copy(status = SeatStatus.SELECTED)
-                    }
-                    println("hanz12 ADD_SEAT $seats")
+                    val seatCount = it.selectedSeatName.size
                     it.copy(
-                        seatList = seats,
-//                        selectedSeatName = list.apply { this.add(seat.name) },
-//                        price = it.selectedSeatName.size * flight.price
-                    ).also { println("hanz12 ADD_SEATLIST  ${it.seatList}") }
+                        seatList = it.seatList.map { item ->
+                            if (item.name == seat.name) item.copy(status = SeatStatus.SELECTED)
+                            else item
+                        },
+                        selectedSeatName = it.selectedSeatName.toMutableList()
+                            .apply { this.add(seat.name) },
+                        price = (seatCount + 1) * flight.price
+                    )
                 }
             }
 
             SEATACTION.REMOVE_SEAT -> {
                 _state.update {
-                    val list = it.selectedSeatName.toMutableList()
-                    println("hanz1 REMOVE_SEAT $seat")
+                    val seatCount = it.selectedSeatName.size
                     it.copy(
                         seatList = it.seatList.map { item ->
                             if (item.name == seat.name) item.copy(status = SeatStatus.AVAILABLE) else item
                         },
-                        selectedSeatName = list.apply { this.remove(seat.name) },
-                        price = it.selectedSeatName.size * flight.price
+                        selectedSeatName = it.selectedSeatName.toMutableList()
+                            .apply { this.remove(seat.name) },
+                        price = (seatCount - 1) * flight.price
                     )
                 }
             }
         }
     }
 
-    fun generateSeatList(flight: FlightModel): List<Seat> {
+    private fun generateSeatList(flight: FlightModel): List<Seat> {
         val seatList = mutableListOf<Seat>()
         val numberSeat = flight.numberSeat + (flight.numberSeat / 7) + 1
         val seatAlphabetMap = mapOf(
