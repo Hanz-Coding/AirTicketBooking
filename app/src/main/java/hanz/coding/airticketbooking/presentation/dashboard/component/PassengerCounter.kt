@@ -1,6 +1,5 @@
 package hanz.coding.airticketbooking.presentation.dashboard.component
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +33,7 @@ import hanz.coding.airticketbooking.R
 fun PassengerCounter(
     title: String,
     modifier: Modifier = Modifier,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (Int) -> Unit
 ) {
     var passengerCount by remember { mutableIntStateOf(1) }
 
@@ -68,7 +67,7 @@ fun PassengerCounter(
                     .clickable {
                         if (passengerCount > 1) {
                             passengerCount--
-                            onItemSelected(passengerCount.toString())
+                            onItemSelected(passengerCount)
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -96,7 +95,7 @@ fun PassengerCounter(
                     .weight(1f)
                     .clickable {
                         passengerCount++
-                        onItemSelected(passengerCount.toString())
+                        onItemSelected(passengerCount)
                     },
                 contentAlignment = Alignment.Center
             ) {

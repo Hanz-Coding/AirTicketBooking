@@ -11,4 +11,5 @@
     <string name="str_unavailable">Unavailable</string>
     <string name="str_confirm_seat">Confirm Seats</string>
     <string name="str_get_ticket">Download Tickets</string>
+    <string name="ms_fill_destination">Fill all the destinations</string>
 </resources>

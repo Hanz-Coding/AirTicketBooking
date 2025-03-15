@@ -1,8 +1,6 @@
 package hanz.coding.airticketbooking.presentation.dashboard
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,12 +17,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Short
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hanz.coding.airticketbooking.R
+import hanz.coding.airticketbooking.navigation.TicketNavHost
 import hanz.coding.airticketbooking.presentation.dashboard.component.DatePickerScreen
 import hanz.coding.airticketbooking.presentation.dashboard.component.DropDownList
 import hanz.coding.airticketbooking.presentation.dashboard.component.MyBottomBar
@@ -40,8 +42,9 @@ import hanz.coding.airticketbooking.presentation.dashboard.component.PassengerCo
 import hanz.coding.airticketbooking.presentation.dashboard.component.TopBar
 import hanz.coding.airticketbooking.presentation.dashboard.state.DashboardState
 import hanz.coding.airticketbooking.presentation.dashboard.viewmodel.DashboardViewModel
-import hanz.coding.airticketbooking.presentation.search.SearchActivity
 import hanz.coding.airticketbooking.presentation.splash.GradientButton
+import hanz.coding.airticketbooking.presentation.splash.StatusBarColor
+import hanz.coding.airticketbooking.rememberAppState
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -53,29 +56,57 @@ class DashboardActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val appState = rememberAppState()
+            val snackbarHostState = remember { SnackbarHostState() }
             KoinAndroidContext {
-                val viewModel = koinViewModel<DashboardViewModel>()
-                val state by viewModel.state.collectAsStateWithLifecycle()
-                LaunchedEffect(true) {
-                    viewModel.loadLocation()
-                }
-                MainScreen(state)
+                TicketNavHost(
+                    appState,
+                    onShowSnackbar = { message, action ->
+                        snackbarHostState.showSnackbar(
+                            message = message,
+                            actionLabel = action,
+                            duration = Short,
+                        ) == ActionPerformed
+                    },
+                )
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(state: DashboardState) {
+fun DashboardRoot(
+    modifier: Modifier = Modifier,
+    dashboardViewModel: DashboardViewModel = koinViewModel(),
+    onConfirmClick: (String, String) -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+) {
+    val state by dashboardViewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(true) {
+        dashboardViewModel.loadLocation()
+    }
+    StatusBarColor()
+    DashboardScreen(
+        modifier = modifier,
+        state = state,
+        onConfirmClick = onConfirmClick,
+        onShowSnackbar = onShowSnackbar
+    )
+}
+
+@Composable
+fun DashboardScreen(
+    modifier: Modifier = Modifier,
+    state: DashboardState,
+    onConfirmClick: (String, String) -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+) {
     val locations = state.locations
     var from: String = ""
     var to: String = ""
     var classes: String = ""
-    var adultPassenger: String = ""
-    var childPassenger: String = ""
-    val context: Context = LocalContext.current
-    // unlock this for preview
-//    StatusBarColor()
+    var adultPassenger: Int = 0
+    var childPassenger: Int = 0
     Scaffold(
         bottomBar = { MyBottomBar() }
     ) { paddingValues ->
@@ -170,15 +201,10 @@ fun MainScreen(state: DashboardState) {
                     Spacer(modifier = Modifier.height(8.dp))
                     GradientButton(
                         onClick = {
-                            val intent = Intent(context, SearchActivity::class.java)
-                                .apply {
-                                    putExtra("from", from)
-                                    putExtra("to", to)
-                                    putExtra("numPassenger", adultPassenger + childPassenger)
-                                }.also {
-                                    println("hanz1 from $from to $to number ${adultPassenger + childPassenger} ")
-                                }
-                            context.startActivity(intent)
+                            val enable = from.isNotEmpty() && to.isNotEmpty()
+                            if (enable) {
+                                onConfirmClick(from, to)
+                            }
                         },
                         text = stringResource(R.string.btn_search)
                     )
@@ -191,8 +217,11 @@ fun MainScreen(state: DashboardState) {
 
 @Preview
 @Composable
-fun MainScreenPreview() {
-    MainScreen(DashboardState())
+fun DashboardPreview() {
+    DashboardScreen(
+        state = DashboardState(),
+        onConfirmClick = { _, _ -> },
+        onShowSnackbar = { _, _ -> false })
 }
 
 @Composable

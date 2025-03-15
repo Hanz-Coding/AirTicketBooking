@@ -23,12 +23,14 @@ import hanz.coding.airticketbooking.R
 @Preview
 @Composable
 fun GradientButton(
+    enable: Boolean = true,
     onClick: () -> Unit = {},
     text: String = "Get Started",
     padding: Int = 0
 ) {
     Button(
         onClick = onClick,
+        enabled = enable,
         modifier = Modifier
             .fillMaxWidth()
             .padding(padding.dp),

@@ -31,8 +31,8 @@ import hanz.coding.airticketbooking.presentation.search.tempFlightModel
 @Composable
 fun ListItemScreen(
     state: SearchState,
-    from: String,
-    to: String,
+    from: String = "",
+    to: String = "",
     onBackClick: () -> Unit
 ) {
     ConstraintLayout(
@@ -104,10 +104,14 @@ fun ListItemScreen(
 @Composable
 fun ListItemPreview(modifier: Modifier = Modifier) {
     ListItemScreen(
-        state = SearchState(flights = listOf(tempFlightModel,
-            tempFlightModel,
-            tempFlightModel,
-            tempFlightModel)),
+        state = SearchState(
+            flights = listOf(
+                tempFlightModel,
+                tempFlightModel,
+                tempFlightModel,
+                tempFlightModel
+            )
+        ),
         from = "A",
         to = "B",
         onBackClick = {}
