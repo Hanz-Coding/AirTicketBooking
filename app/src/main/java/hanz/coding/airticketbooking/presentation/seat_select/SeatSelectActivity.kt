@@ -27,7 +27,7 @@ class SeatSelectActivity : ComponentActivity() {
         enableEdgeToEdge()
         flight = intent.getSerializableExtra("flight", FlightModel::class.java) as FlightModel
         setContent {
-//            StatusBarColor()
+            StatusBarColor()
             val context = LocalContext.current
             val viewModel = koinViewModel<SeatViewModel>()
             LaunchedEffect(true) {

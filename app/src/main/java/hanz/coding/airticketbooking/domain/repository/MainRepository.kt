@@ -6,12 +6,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import hanz.coding.airticketbooking.domain.FlightModel
+import hanz.coding.airticketbooking.domain.FlightState
 import hanz.coding.airticketbooking.domain.LocationModel
+import hanz.coding.airticketbooking.presentation.seat_select.SeatState
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class MainRepository {
+
+    private val flightState = DefaultState()
+    fun getFlightState() = flightState
 
     private val firebaseDatabase =
         FirebaseDatabase.getInstance("https://airticketbooking1-bdab4-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -53,3 +58,12 @@ class MainRepository {
         awaitClose { refFlights.removeEventListener(listener) }
     }
 }
+
+
+data class DefaultState(
+    val origin: String = "Select origin",
+    val destination: String = "Select destination",
+    val adultPassenger: Int = 0,
+    val childPassenger: Int = 0,
+    val classes: String = "Select class"
+)

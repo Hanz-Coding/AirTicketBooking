@@ -5,7 +5,6 @@ import hanz.coding.airticketbooking.domain.FlightModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import okhttp3.internal.toImmutableList
 
 class SeatViewModel : ViewModel() {
     private val _state = MutableStateFlow(SeatState())

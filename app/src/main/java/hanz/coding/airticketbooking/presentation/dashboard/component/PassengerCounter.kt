@@ -32,10 +32,11 @@ import hanz.coding.airticketbooking.R
 @Composable
 fun PassengerCounter(
     title: String,
+    passengerDefault:Int,
     modifier: Modifier = Modifier,
     onItemSelected: (Int) -> Unit
 ) {
-    var passengerCount by remember { mutableIntStateOf(1) }
+    var passengerCount by remember { mutableIntStateOf(passengerDefault) }
 
     Box(
         modifier = modifier
