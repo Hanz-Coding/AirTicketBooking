@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,9 +31,9 @@ import hanz.coding.airticketbooking.R
 
 @Composable
 fun PassengerCounter(
-    title: String,
-    passengerDefault:Int,
     modifier: Modifier = Modifier,
+    title: String,
+    passengerDefault: Int = 0,
     onItemSelected: (Int) -> Unit
 ) {
     var passengerCount by remember { mutableIntStateOf(passengerDefault) }
@@ -117,6 +117,7 @@ fun PassengerCounter(
 fun PassengerPreview() {
     PassengerCounter(
         title = "Title",
+        passengerDefault = 0,
         onItemSelected = {}
     )
 }

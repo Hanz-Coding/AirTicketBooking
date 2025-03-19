@@ -18,6 +18,8 @@ data class DefaultState(
 
 sealed class ACTION {
     data class UPDATE_ORIGIN(val origin: String) : ACTION()
-    data class UPDATE_DESTINATION(val origin: String) : ACTION()
-    data class UPDATE_ADULT(val origin: String) : ACTION()
+    data class UPDATE_DESTINATION(val destination: String) : ACTION()
+    data class UPDATE_ADULT(val adultPassenger: Int) : ACTION()
+    data class UPDATE_CHILD(val childPassenger: Int) : ACTION()
+    data class UPDATE_CLASS(val classes: String) : ACTION()
 }

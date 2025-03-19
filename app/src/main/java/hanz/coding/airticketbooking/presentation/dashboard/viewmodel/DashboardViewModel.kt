@@ -3,6 +3,7 @@ package hanz.coding.airticketbooking.presentation.dashboard.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hanz.coding.airticketbooking.domain.repository.MainRepository
+import hanz.coding.airticketbooking.presentation.dashboard.state.ACTION
 import hanz.coding.airticketbooking.presentation.dashboard.state.DashboardState
 import hanz.coding.airticketbooking.presentation.dashboard.state.DefaultState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,17 +13,7 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(private val repository: MainRepository) : ViewModel() {
 
-    val flightState = repository.getFlightState()
-
-    private val _defaultState = MutableStateFlow(
-        DefaultState(
-            origin = flightState.origin,
-            destination = flightState.destination,
-            adultPassenger = flightState.adultPassenger,
-            childPassenger = flightState.childPassenger,
-            classes = flightState.classes
-        )
-    )
+    private val _defaultState = MutableStateFlow(DefaultState())
     val defaultState = _defaultState.asStateFlow()
 
     private val _state = MutableStateFlow(DashboardState())
@@ -44,4 +35,27 @@ class DashboardViewModel(private val repository: MainRepository) : ViewModel() {
         }
     }
 
+    fun onAction(action: ACTION) {
+        when (action) {
+            is ACTION.UPDATE_ADULT -> _defaultState.update {
+                it.copy(adultPassenger = action.adultPassenger)
+            }
+
+            is ACTION.UPDATE_CHILD -> _defaultState.update {
+                it.copy(childPassenger = action.childPassenger)
+            }
+
+            is ACTION.UPDATE_CLASS -> _defaultState.update {
+                it.copy(classes = action.classes)
+            }
+
+            is ACTION.UPDATE_DESTINATION -> _defaultState.update {
+                it.copy(destination = action.destination)
+            }
+
+            is ACTION.UPDATE_ORIGIN -> _defaultState.update {
+                it.copy(origin = action.origin)
+            }
+        }
+    }
 }
