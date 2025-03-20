@@ -23,9 +23,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.dashboard.DashboardActivity" />
-        <activity android:name=".presentation.search.SearchActivity"/>
-        <activity android:name=".presentation.seat_select.SeatSelectActivity"/>
-        <activity android:name=".presentation.ticket.TicketDetailActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

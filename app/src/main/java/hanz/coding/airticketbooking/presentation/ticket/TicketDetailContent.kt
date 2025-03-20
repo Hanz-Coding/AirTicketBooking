@@ -1,10 +1,8 @@
 package hanz.coding.airticketbooking.presentation.ticket
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,12 +28,11 @@ import coil.compose.AsyncImage
 import hanz.coding.airticketbooking.R
 import hanz.coding.airticketbooking.domain.FlightModel
 import hanz.coding.airticketbooking.presentation.search.tempFlightModel
-import hanz.coding.airticketbooking.presentation.seat_select.SeatSelectActivity
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun TicketDetailContent(
-    item: FlightModel,
+    item: FlightModel?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -52,30 +48,20 @@ fun TicketDetailContent(
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            val (logo, arrivalTxt, lineImg, fromTxt, fromShortTxt, toTxt, toShortTxt) = createRefs()
-            val context = LocalContext.current
             ConstraintLayout(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth()
-                    .clickable {
-                        context.startActivity(
-                            Intent(
-                                context,
-                                SeatSelectActivity::class.java
-                            ).apply {
-                                putExtra("flight", item)
-                            })
-                    }
                     .background(
                         color = colorResource(R.color.lightPurple),
                         shape = RoundedCornerShape(15.dp)
-                    )) {
-                val (logo, timeTxt, airplaneIcon, dashLine, priceTxt, seatIcon, classTxt,
+                    )
+            ) {
+                val (logo, timeTxt, airplaneIcon, seatIcon, classTxt,
                     fromTxt, fromShortTxt, toTxt, toShortTxt) = createRefs()
 
                 AsyncImage(
-                    model = item.airlineLogo,
+                    model = item?.airlineLogo,
                     contentDescription = "airline logo",
                     modifier = Modifier
                         .size(200.dp, 50.dp)
@@ -86,7 +72,7 @@ fun TicketDetailContent(
                         }
                 )
                 Text(
-                    text = item.arriveTime,
+                    text = item?.arriveTime ?: "",
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -111,7 +97,7 @@ fun TicketDetailContent(
                         }
                 )
                 Text(
-                    text = item.arriveTime,
+                    text = item?.arriveTime ?: "",
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 12.sp,
@@ -126,7 +112,7 @@ fun TicketDetailContent(
                 )
 
                 Text(
-                    text = item.from,
+                    text = item?.from ?: "",
                     fontSize = 14.sp,
                     color = Color.Black,
                     modifier = Modifier
@@ -137,7 +123,7 @@ fun TicketDetailContent(
                         }
                 )
                 Text(
-                    text = item.fromShort,
+                    text = item?.fromShort ?: "",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -151,7 +137,7 @@ fun TicketDetailContent(
                 )
 
                 Text(
-                    text = item.to,
+                    text = item?.to ?: "",
                     fontSize = 14.sp,
                     color = Color.Black,
                     modifier = Modifier
@@ -162,7 +148,7 @@ fun TicketDetailContent(
                         }
                 )
                 Text(
-                    text = item.toShort,
+                    text = item?.toShort ?: "",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -183,18 +169,18 @@ fun TicketDetailContent(
         ) {
             Column(modifier = Modifier.weight(0.5f)) {
                 Text(text = "From", color = Color.Black)
-                Text(text = item.from, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = item?.from ?: "", color = Color.Black, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Date", color = Color.Black)
-                Text(text = item.date, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = item?.date ?: "", color = Color.Black, fontWeight = FontWeight.Bold)
             }
 
             Column(modifier = Modifier.weight(0.5f)) {
                 Text(text = "To", color = Color.Black)
-                Text(text = item.to, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = item?.to ?: "", color = Color.Black, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Time", color = Color.Black)
-                Text(text = item.time, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = item?.time ?: "", color = Color.Black, fontWeight = FontWeight.Bold)
             }
         }
         Image(
@@ -211,19 +197,27 @@ fun TicketDetailContent(
         ) {
             Column(modifier = Modifier.weight(0.5f)) {
                 Text(text = "Class", color = Color.Black)
-                Text(text = item.classSeat, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(
+                    text = item?.classSeat ?: "",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Seats", color = Color.Black)
-                Text(text = item.seats, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = item?.seats ?: "", color = Color.Black, fontWeight = FontWeight.Bold)
             }
 
             Column(modifier = Modifier.weight(0.5f)) {
                 Text(text = "Airlines", color = Color.Black)
-                Text(text = item.airlineName, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(
+                    text = item?.airlineName ?: "",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Price", color = Color.Black)
                 Text(
-                    text = "$${String.format("%.2f", item.price)}",
+                    text = "$${String.format("%.2f", item?.price)}",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold
                 )

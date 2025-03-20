@@ -8,6 +8,10 @@ import hanz.coding.airticketbooking.presentation.dashboard.navigation.MainRoute
 import hanz.coding.airticketbooking.presentation.dashboard.navigation.dashboardScreen
 import hanz.coding.airticketbooking.presentation.search.navigateToSearch
 import hanz.coding.airticketbooking.presentation.search.searchScreen
+import hanz.coding.airticketbooking.presentation.seat_select.navigateToSeat
+import hanz.coding.airticketbooking.presentation.seat_select.seatScreen
+import hanz.coding.airticketbooking.presentation.ticket.navigateToTicket
+import hanz.coding.airticketbooking.presentation.ticket.ticketScreen
 
 @Composable
 fun TicketNavHost(
@@ -32,7 +36,18 @@ fun TicketNavHost(
         )
 
         searchScreen(
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onFlightClick = { navController.navigateToSeat() }
+        )
+
+        seatScreen(
+            onBackClick = navController::popBackStack,
+            onConfirmClick = { navController.navigateToTicket() }
+        )
+
+        ticketScreen(
+            onBackClick = navController::popBackStack,
+            onConfirmClick = { }
         )
     }
 }

@@ -20,7 +20,7 @@ import hanz.coding.airticketbooking.presentation.splash.GradientButton
 
 @Composable
 fun TicketDetailScreen(
-    flight: FlightModel,
+    flight: FlightModel?,
     onBackClick: () -> Unit,
     onDownloadTicketClick: () -> Unit
 ) {
@@ -63,7 +63,7 @@ fun TicketDetailScreen(
                 )
             }
             GradientButton(
-                onClick = {},
+                onClick = onDownloadTicketClick,
                 text = stringResource(R.string.str_get_ticket)
             )
         }

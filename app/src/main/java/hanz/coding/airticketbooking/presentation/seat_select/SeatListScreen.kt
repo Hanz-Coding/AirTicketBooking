@@ -32,11 +32,11 @@ data class Seat(
 )
 
 @Composable
-fun SeatListScreen(
+fun SeatScreen(
     state: SeatState,
     onBackClick: () -> Unit,
     onConfirm: () -> Unit,
-    onAction: (SEATACTION, Seat) -> Unit
+    onAction: (SeatAction, Seat) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -90,11 +90,11 @@ fun SeatListScreen(
                         onSeatClick = {
                             when (seat.status) {
                                 SeatStatus.AVAILABLE -> {
-                                    onAction(SEATACTION.ADD_SEAT, seat)
+                                    onAction(SeatAction.ADD_SEAT, seat)
                                 }
 
                                 SeatStatus.SELECTED -> {
-                                    onAction(SEATACTION.REMOVE_SEAT, seat)
+                                    onAction(SeatAction.REMOVE_SEAT, seat)
                                 }
 
                                 SeatStatus.UNAVAILABLE -> {
@@ -134,8 +134,8 @@ fun SeatListScreen(
 
 @Preview
 @Composable
-fun SeatListPreview(modifier: Modifier = Modifier) {
-    SeatListScreen(
+fun SeatScreenPreview(modifier: Modifier = Modifier) {
+    SeatScreen(
         state = SeatState(),
         onBackClick = {},
         onConfirm = {},

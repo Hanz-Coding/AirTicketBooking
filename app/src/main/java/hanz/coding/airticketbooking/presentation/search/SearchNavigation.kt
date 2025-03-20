@@ -27,13 +27,15 @@ fun NavController.navigateToSearch(
 
 fun NavGraphBuilder.searchScreen(
     onBackClick: () -> Unit,
+    onFlightClick: () -> Unit
 ) {
     composable<SearchRoute> {
         val args = it.toRoute<SearchRoute>()
         SearchRoot(
             destinationFrom = args.destinationFrom,
             destinationTo = args.destinationTo,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onFlightClick = onFlightClick
         )
     }
 }

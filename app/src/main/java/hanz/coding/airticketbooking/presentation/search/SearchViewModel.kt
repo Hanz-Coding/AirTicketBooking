@@ -2,6 +2,7 @@ package hanz.coding.airticketbooking.presentation.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import hanz.coding.airticketbooking.domain.FlightModel
 import hanz.coding.airticketbooking.domain.repository.MainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,6 +12,8 @@ import kotlinx.coroutines.launch
 class SearchViewModel(private val repository: MainRepository) : ViewModel() {
     private val _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
+
+    fun updateCurrentFlight(flight: FlightModel) = repository.setCurrentFlight(flight)
 
     fun loadFlights(from: String, to: String) {
         viewModelScope.launch {

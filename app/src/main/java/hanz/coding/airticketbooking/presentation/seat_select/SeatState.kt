@@ -6,7 +6,7 @@ data class SeatState(
     val price: Double = 0.0
 )
 
-enum class SEATACTION {
+enum class SeatAction {
     ADD_SEAT,
     REMOVE_SEAT
 }

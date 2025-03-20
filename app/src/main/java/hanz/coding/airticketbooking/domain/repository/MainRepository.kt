@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class MainRepository {
+    private var flightModel: FlightModel? = null
+    fun getCurrentFlight() = flightModel
+    fun setCurrentFlight(flightModel: FlightModel) {
+        this.flightModel = flightModel
+    }
 
     private val firebaseDatabase =
         FirebaseDatabase.getInstance("https://airticketbooking1-bdab4-default-rtdb.asia-southeast1.firebasedatabase.app")

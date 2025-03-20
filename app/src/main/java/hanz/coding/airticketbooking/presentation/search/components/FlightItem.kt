@@ -26,20 +26,19 @@ import coil.compose.AsyncImage
 import hanz.coding.airticketbooking.R
 import hanz.coding.airticketbooking.domain.FlightModel
 import hanz.coding.airticketbooking.presentation.search.tempFlightModel
-import hanz.coding.airticketbooking.presentation.seat_select.SeatSelectActivity
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun FlightItem(item: FlightModel, index: Int) {
-    val context = LocalContext.current
+fun FlightItem(
+    item: FlightModel, index: Int,
+    onItemClick: (FlightModel) -> Unit
+) {
     ConstraintLayout(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
             .clickable {
-                context.startActivity(Intent(context, SeatSelectActivity::class.java).apply {
-                    putExtra("flight", item)
-                })
+                onItemClick(item)
             }
             .background(
                 color = colorResource(R.color.lightPurple),
@@ -193,6 +192,7 @@ fun FlightItem(item: FlightModel, index: Int) {
 fun FlightItemsPreview(modifier: Modifier = Modifier) {
     FlightItem(
         item = tempFlightModel,
-        index = 10
+        index = 10,
+        onItemClick = {}
     )
 }

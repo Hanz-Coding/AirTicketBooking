@@ -2,27 +2,31 @@ package hanz.coding.airticketbooking.presentation.seat_select
 
 import androidx.lifecycle.ViewModel
 import hanz.coding.airticketbooking.domain.FlightModel
+import hanz.coding.airticketbooking.domain.repository.MainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SeatViewModel : ViewModel() {
+class SeatViewModel(repository: MainRepository) : ViewModel() {
     private val _state = MutableStateFlow(SeatState())
     val state = _state.asStateFlow()
 
-    private lateinit var flight: FlightModel
+    private val flight = repository.getCurrentFlight()
+    private val seatPrice = flight?.price ?: 0.0
 
-    fun updateFlight(item: FlightModel) {
-        flight = item
-        val seatList = generateSeatList(flight)
-        _state.update {
-            it.copy(seatList = seatList)
+    fun updateFlight() {
+
+        flight?.let {
+            val seatList = generateSeatList(flight)
+            _state.update {
+                it.copy(seatList = seatList)
+            }
         }
     }
 
-    fun onAction(action: SEATACTION, seat: Seat) {
+    fun onAction(action: SeatAction, seat: Seat) {
         when (action) {
-            SEATACTION.ADD_SEAT -> {
+            SeatAction.ADD_SEAT -> {
                 _state.update {
                     val seatCount = it.selectedSeatName.size
                     it.copy(
@@ -32,12 +36,12 @@ class SeatViewModel : ViewModel() {
                         },
                         selectedSeatName = it.selectedSeatName.toMutableList()
                             .apply { this.add(seat.name) },
-                        price = (seatCount + 1) * flight.price
+                        price = (seatCount + 1) * seatPrice
                     )
                 }
             }
 
-            SEATACTION.REMOVE_SEAT -> {
+            SeatAction.REMOVE_SEAT -> {
                 _state.update {
                     val seatCount = it.selectedSeatName.size
                     it.copy(
@@ -46,7 +50,7 @@ class SeatViewModel : ViewModel() {
                         },
                         selectedSeatName = it.selectedSeatName.toMutableList()
                             .apply { this.remove(seat.name) },
-                        price = (seatCount - 1) * flight.price
+                        price = (seatCount - 1) * seatPrice
                     )
                 }
             }
